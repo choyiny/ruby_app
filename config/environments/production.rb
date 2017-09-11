@@ -1,4 +1,4 @@
-FirstApp::Application.configure do
+RubyApp::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
