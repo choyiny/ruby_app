@@ -3,6 +3,10 @@ class User < ActiveRecord::Base
   # before saving the user object to the database, turn email to all lowercase
   before_save { self.email = email.downcase }
 
+  # before creating, create a remember token
+  before_create :create_remember_token
+
+
   # validation: name cannot be blank, and more than 50 characters
   validates(:name, presence: true, length: { maximum: 50})
 
@@ -17,5 +21,20 @@ class User < ActiveRecord::Base
 
   # pwd should be at least 6 chars
   validates :password, length: { minimum: 6 }
+
+
+  def User.new_remember_token
+    SecureRandom.urlsafe_base64
+  end
+
+  def User.digest(token)
+    Digest::SHA1.hexdigest(token.to_s)
+  end
+
+  private
+
+    def create_remember_token
+      self.remember_token = User.digest(User.new_remember_token)
+    end
 
 end
