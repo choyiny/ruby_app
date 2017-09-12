@@ -20,6 +20,8 @@ describe User do
   it { should respond_to(:authenticate) }
   it { should respond_to(:remember_token) }
 
+  it(:remember_token) { should_not be_blank }
+
 
   # sanity check - user should be valid initially
   it { should be_valid }
