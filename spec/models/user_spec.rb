@@ -18,6 +18,7 @@ describe User do
   it { should respond_to(:password_confirmation) }
   # should have auth attr
   it { should respond_to(:authenticate) }
+  it { should respond_to(:remember_token) }
 
 
   # sanity check - user should be valid initially
