@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   # execute these before others
   before_action :signed_in_user, only: [:index, :edit, :update]
   before_action :correct_user, only: [:edit, :update]
-
+  before_action :admin_user, only: :destroy
 
   def new
     @user = User.new
@@ -48,6 +48,13 @@ class UsersController < ApplicationController
     @users = User.paginate(page: params[:page])
   end
 
+  def destroy
+    # find and destroy
+    User.find(params[:id]).destroy
+    flash[:success] = "User deleted."
+    redirect_to users_url
+  end
+
   # these are private methods only accessible by the class
   private
 
@@ -72,5 +79,8 @@ class UsersController < ApplicationController
     redirect_to(root_url) unless current_user?(@user)
   end
 
+  def admin_user
+    redirect_to(root_url) unless current_user.admin?
+  end
 
 end
