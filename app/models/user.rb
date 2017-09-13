@@ -1,5 +1,8 @@
 class User < ActiveRecord::Base
 
+  # relations
+  has_many :microposts, dependent: :destroy
+
   # before saving the user object to the database, turn email to all lowercase
   before_save { self.email = email.downcase }
 
