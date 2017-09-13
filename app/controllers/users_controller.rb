@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
-  # before doing these stuff
-  before_action :signed_in_user, only: [:edit, :update]
+  # execute these before others
+  before_action :signed_in_user, only: [:index, :edit, :update]
+  before_action :correct_user, only: [:edit, :update]
 
 
   def new

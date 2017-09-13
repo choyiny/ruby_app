@@ -33,4 +33,17 @@ module SessionsHelper
   def current_user?(user)
     user == current_user
   end
+
+  # friendly forwarding
+  # redirect user to the requested page after logging in
+
+  def redirect_back_or(default)
+    # storage mechanism - session
+    redirect_to(session[:return_to] ||default)
+    session.delete(:return_to)
+  end
+
+  def store_location
+    session[:return_to] = request.url if request.get?
+  end
 end
