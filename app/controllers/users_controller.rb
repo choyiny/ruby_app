@@ -68,12 +68,6 @@ class UsersController < ApplicationController
 
   # filters for the before action
 
-  # user must be signed in for edit and update user
-  def signed_in_user
-    # redirect to the sign in page if page is protected and user not signed in
-    redirect_to signin_url, notice: "Please sign in." unless signed_in?
-  end
-
   # The correct user for updating the own profile
   def correct_user
     @user = User.find(params[:id])
