@@ -43,6 +43,12 @@ class UsersController < ApplicationController
     end
   end
 
+  def index
+    # request the user according to paginate
+    @users = User.paginate(page: params[:page])
+  end
+
+  # these are private methods only accessible by the class
   private
 
   def user_params
