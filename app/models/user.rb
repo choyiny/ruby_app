@@ -2,6 +2,11 @@ class User < ActiveRecord::Base
 
   # relations
   has_many :microposts, dependent: :destroy
+  has_many :relationships, foreign_key: "follower_id", dependent: :destroy
+  has_many :followed_users, through: :relationships, source: :followed
+  has_many :reverse_relationships, foreign_key: "followed_id",
+           class_name: "Relationship"
+  has_many :followers, through: :reverse_relationships
 
   # before saving the user object to the database, turn email to all lowercase
   before_save { self.email = email.downcase }
@@ -35,8 +40,16 @@ class User < ActiveRecord::Base
   end
 
   def feed
-    # ? stops sql injection
+    # ? stops sql injection (acts as sanitizer)
     Micropost.where("user_id = ?", id)
+  end
+
+  def following?(other_user)
+    self.relationships.find_by(followed_id: other_user.id)
+  end
+
+  def follow!(other_user)
+    self.relationships.create!(followed_id: other_user.id)
   end
 
   private
