@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   # execute these before others
-  before_action :signed_in_user, only: [:index, :edit, :update]
+  before_action :signed_in_user, only: [:index, :edit, :update, :destroy, :following, :followers]
   before_action :correct_user, only: [:edit, :update]
   before_action :admin_user, only: :destroy
 
@@ -56,26 +56,40 @@ class UsersController < ApplicationController
     redirect_to users_url
   end
 
+  def following
+    @title = "Following"
+    @user = User.find(params[:id])
+    @users = @user.followed_users.paginate(page: params[:page])
+    render 'show_follow'
+  end
+
+  def followers
+    @title = "Followers"
+    @user = User.find(params[:id])
+    @users = @user.followers.paginate(page: params[:page])
+    render 'show_follow'
+  end
+
   # these are private methods only accessible by the class
   private
 
-  def user_params
-    # require user, and only permit the following parameters to be inserted
-    # prevents security flaw - using curl to gain admin access
-    params.require(:user).permit(:name, :email, :password,
-                                 :password_confirmation)
-  end
+    def user_params
+      # require user, and only permit the following parameters to be inserted
+      # prevents security flaw - using curl to gain admin access
+      params.require(:user).permit(:name, :email, :password,
+                                   :password_confirmation)
+    end
 
-  # filters for the before action
+    # filters for the before action
 
-  # The correct user for updating the own profile
-  def correct_user
-    @user = User.find(params[:id])
-    redirect_to(root_url) unless current_user?(@user)
-  end
+    # The correct user for updating the own profile
+    def correct_user
+      @user = User.find(params[:id])
+      redirect_to(root_url) unless current_user?(@user)
+    end
 
-  def admin_user
-    redirect_to(root_url) unless current_user.admin?
-  end
+    def admin_user
+      redirect_to(root_url) unless current_user.admin?
+    end
 
 end
