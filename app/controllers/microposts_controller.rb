@@ -31,11 +31,11 @@ class MicropostsController < ApplicationController
       params.require(:micropost).permit(:content)
     end
 
-  # we only want the user themselves to be able to remove their posts
-  def correct_user
-    # find microposts by user
-    @micropost = current_user.microposts.find_by(id: params[:id])
-    # goto homepage if micropost does not belong to user
-    redirect_to root_url if @micropost.nil?
-  end
+    # we only want the user themselves to be able to remove their posts
+    def correct_user
+      # find microposts by user
+      @micropost = current_user.microposts.find_by(id: params[:id])
+      # goto homepage if micropost does not belong to user
+      redirect_to root_url if @micropost.nil?
+    end
 end
